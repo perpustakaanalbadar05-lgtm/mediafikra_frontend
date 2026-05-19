@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Plus, Pencil, Trash2, X, Star } from 'lucide-react';
 import api from '../../services/api';
 
-const EMPTY = { nama: '', jabatan: '', rating: 5, isi_review: '', status_publish: true };
+const EMPTY = { nama: '', jabatan: '', rating: 5, isi_review: '', status_publish: true, foto: null };
 
 export default function AdminTestimoniPage() {
   const [items, setItems] = useState([]);
@@ -17,16 +17,33 @@ export default function AdminTestimoniPage() {
   useEffect(() => { fetch(); }, []);
 
   const openCreate = () => { setForm(EMPTY); setEditId(null); setError(''); setShowModal(true); };
-  const openEdit = (item) => { setForm({ nama: item.nama, jabatan: item.jabatan || '', rating: item.rating, isi_review: item.isi_review, status_publish: item.status_publish }); setEditId(item.id); setError(''); setShowModal(true); };
+  const openEdit = (item) => { setForm({ nama: item.nama, jabatan: item.jabatan || '', rating: item.rating, isi_review: item.isi_review, status_publish: item.status_publish, foto: null }); setEditId(item.id); setError(''); setShowModal(true); };
 
   const handleSave = async (e) => {
     e.preventDefault();
     setSaving(true);
     setError('');
     try {
-      const payload = { ...form, rating: Number(form.rating) };
-      if (editId) { await api.put(`/admin/testimonials/${editId}`, payload); }
-      else { await api.post('/admin/testimonials', payload); }
+      const formData = new FormData();
+      formData.append('nama', form.nama);
+      formData.append('jabatan', form.jabatan || '');
+      formData.append('rating', Number(form.rating));
+      formData.append('isi_review', form.isi_review);
+      formData.append('status_publish', form.status_publish ? 1 : 0);
+      if (form.foto) {
+        formData.append('foto', form.foto);
+      }
+
+      if (editId) {
+        formData.append('_method', 'PUT');
+        await api.post(`/admin/testimonials/${editId}`, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
+      } else {
+        await api.post('/admin/testimonials', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
+      }
       setShowModal(false);
       fetch();
     } catch (err) {
@@ -90,6 +107,10 @@ export default function AdminTestimoniPage() {
                   <input required={f.req} type={f.type} value={form[f.key]} onChange={e => setForm({...form, [f.key]: e.target.value})} className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-indigo-500" />
                 </div>
               ))}
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">Foto (Opsional, Max 2MB)</label>
+                <input type="file" accept="image/*" onChange={e => setForm({...form, foto: e.target.files[0]})} className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-indigo-500" />
+              </div>
               <div>
                 <label className="block text-xs font-semibold text-slate-700 mb-1">Rating (1–5)</label>
                 <input type="number" min={1} max={5} value={form.rating} onChange={e => setForm({...form, rating: e.target.value})} className="w-20 px-3 py-2 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-indigo-500" />

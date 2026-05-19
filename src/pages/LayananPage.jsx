@@ -1,4 +1,6 @@
 import { BookOpen, FileText, Sparkles, Award, CheckCircle, ArrowRight, MessageCircle } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import api from '../services/api';
 
 const services = [
   {
@@ -47,6 +49,14 @@ const colorMap = {
 };
 
 export default function LayananPage() {
+  const [wa, setWa] = useState('6281234567890');
+
+  useEffect(() => {
+    api.get('/settings').then(r => {
+      if (r.data.contact_wa) setWa(r.data.contact_wa);
+    }).catch(() => {});
+  }, []);
+
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Header */}
@@ -78,7 +88,7 @@ export default function LayananPage() {
                 <div>
                   <p className="text-slate-600 leading-relaxed text-sm">{s.desc}</p>
                   <a
-                    href={`https://wa.me/6281234567890?text=${encodeURIComponent(s.wa)}`}
+                    href={`https://wa.me/${wa}?text=${encodeURIComponent(s.wa)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className={`inline-flex items-center gap-2 mt-4 px-4 py-2 ${c.icon} text-white text-sm font-medium rounded-xl hover:opacity-90 transition-opacity`}
@@ -110,7 +120,7 @@ export default function LayananPage() {
           <h2 className="text-2xl font-bold mb-3">Butuh Bantuan Memilih Layanan?</h2>
           <p className="text-indigo-200 mb-6 text-sm">Konsultasi gratis dengan tim kami dan kami akan merekomendasikan layanan yang paling sesuai untuk Anda.</p>
           <a
-            href="https://wa.me/6281234567890?text=Halo Media Fikra, saya ingin konsultasi tentang layanan penerbitan"
+            href={`https://wa.me/${wa}?text=Halo Media Fikra, saya ingin konsultasi tentang layanan penerbitan`}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-6 py-3 bg-white text-indigo-700 font-bold rounded-xl hover:bg-indigo-50 transition-colors"

@@ -14,6 +14,8 @@ import PortofolioPage from './pages/PortofolioPage';
 import TentangPage from './pages/TentangPage';
 import KontakPage from './pages/KontakPage';
 import FAQPage from './pages/FAQPage';
+import PromoListPage from './pages/PromoListPage';
+import PromoDetailPage from './pages/PromoDetailPage';
 
 // Admin pages
 import AdminLoginPage from './pages/admin/AdminLoginPage';
@@ -38,6 +40,8 @@ export default function App() {
           <Route element={<PublicLayout><DetailBukuPage /></PublicLayout>} path="/katalog/:id" />
           <Route element={<PublicLayout><TestimoniPage /></PublicLayout>} path="/testimoni" />
           <Route element={<PublicLayout><PortofolioPage /></PublicLayout>} path="/portofolio" />
+          <Route element={<PublicLayout><PromoListPage /></PublicLayout>} path="/promo" />
+          <Route element={<PublicLayout><PromoDetailPage /></PublicLayout>} path="/promo/:id" />
           <Route element={<PublicLayout><TentangPage /></PublicLayout>} path="/tentang" />
           <Route element={<PublicLayout><KontakPage /></PublicLayout>} path="/kontak" />
           <Route element={<PublicLayout><FAQPage /></PublicLayout>} path="/faq" />

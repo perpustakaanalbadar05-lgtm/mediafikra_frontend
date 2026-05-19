@@ -1,6 +1,18 @@
 import { Phone, Mail, MessageCircle, Share2, ExternalLink, MapPin } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import api from '../services/api';
 
 export default function KontakPage() {
+  const [settings, setSettings] = useState({ contact_wa: '6281234567890', contact_email: 'info@mediafikra.com' });
+
+  useEffect(() => {
+    api.get('/settings').then(r => {
+      setSettings(prev => ({ ...prev, ...r.data }));
+    }).catch(() => {});
+  }, []);
+
+  const formattedWa = settings.contact_wa ? `+${settings.contact_wa}` : '+62 812-3456-7890';
+
   return (
     <div className="min-h-screen bg-slate-50">
       <div className="bg-white border-b border-slate-100 py-12">
@@ -13,7 +25,7 @@ export default function KontakPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           <a
-            href="https://wa.me/6281234567890"
+            href={`https://wa.me/${settings.contact_wa}`}
             target="_blank"
             rel="noopener noreferrer"
             className="group bg-white rounded-2xl p-6 border border-slate-100 hover:border-green-200 hover:shadow-md transition-all flex items-center gap-4"
@@ -23,13 +35,13 @@ export default function KontakPage() {
             </div>
             <div>
               <p className="font-semibold text-slate-900">WhatsApp CS</p>
-              <p className="text-slate-500 text-sm">+62 812-3456-7890</p>
+              <p className="text-slate-500 text-sm">{formattedWa}</p>
               <p className="text-xs text-green-600 mt-0.5">Respons cepat (jam kerja)</p>
             </div>
           </a>
 
           <a
-            href="mailto:info@mediafikra.com"
+            href={`mailto:${settings.contact_email}`}
             className="group bg-white rounded-2xl p-6 border border-slate-100 hover:border-indigo-200 hover:shadow-md transition-all flex items-center gap-4"
           >
             <div className="bg-indigo-100 p-3.5 rounded-xl group-hover:bg-indigo-200 transition-colors">
@@ -37,7 +49,7 @@ export default function KontakPage() {
             </div>
             <div>
               <p className="font-semibold text-slate-900">Email</p>
-              <p className="text-slate-500 text-sm">info@mediafikra.com</p>
+              <p className="text-slate-500 text-sm">{settings.contact_email}</p>
               <p className="text-xs text-indigo-600 mt-0.5">Dibalas dalam 1×24 jam</p>
             </div>
           </a>
@@ -48,7 +60,7 @@ export default function KontakPage() {
             </div>
             <div>
               <p className="font-semibold text-slate-900">Telepon</p>
-              <p className="text-slate-500 text-sm">+62 812-3456-7890</p>
+              <p className="text-slate-500 text-sm">{formattedWa}</p>
               <p className="text-xs text-slate-500 mt-0.5">Senin – Jumat, 08.00 – 17.00 WIB</p>
             </div>
           </div>
@@ -72,7 +84,7 @@ export default function KontakPage() {
           <h2 className="text-2xl font-bold mb-3">Mulai Konsultasi Sekarang</h2>
           <p className="text-indigo-200 mb-6">Ceritakan proyek buku Anda dan kami akan memberikan solusi terbaik.</p>
           <a
-            href="https://wa.me/6281234567890?text=Halo Media Fikra, saya ingin berkonsultasi tentang penerbitan buku."
+            href={`https://wa.me/${settings.contact_wa}?text=Halo Media Fikra, saya ingin berkonsultasi tentang penerbitan buku.`}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-6 py-3 bg-white text-indigo-700 font-bold rounded-xl hover:bg-indigo-50 transition-colors"

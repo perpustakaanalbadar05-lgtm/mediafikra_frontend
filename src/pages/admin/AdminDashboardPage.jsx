@@ -61,30 +61,71 @@ export default function AdminDashboardPage() {
         <StatCard icon={Image} label="Portofolio" value={stats.portfolios} color="bg-emerald-100 text-emerald-700" />
       </div>
 
-      {/* Recent Orders */}
-      <div className="bg-white rounded-2xl border border-slate-100">
-        <div className="px-6 py-4 border-b border-slate-100">
-          <h2 className="font-semibold text-slate-900">Pesanan Terbaru</h2>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Recent Orders */}
+        <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-100 flex flex-col">
+          <div className="px-6 py-4 border-b border-slate-100">
+            <h2 className="font-semibold text-slate-900">Pesanan Terbaru</h2>
+          </div>
+          <div className="divide-y divide-slate-50 flex-1">
+            {recentOrders.length === 0 ? (
+              <p className="text-center text-slate-400 text-sm py-8">Belum ada pesanan.</p>
+            ) : (
+              recentOrders.map(order => (
+                <div key={order.id} className="px-6 py-4 flex items-center justify-between gap-4">
+                  <div className="min-w-0">
+                    <p className="font-medium text-slate-900 text-sm truncate">{order.nama_pembeli}</p>
+                    <p className="text-xs text-slate-500 truncate">{order.book?.judul} — {order.qty} eks</p>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <p className="text-sm font-semibold text-indigo-700">Rp {order.total?.toLocaleString('id-ID')}</p>
+                    <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${statusColors[order.status]}`}>
+                      {order.status}
+                    </span>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
         </div>
-        <div className="divide-y divide-slate-50">
-          {recentOrders.length === 0 ? (
-            <p className="text-center text-slate-400 text-sm py-8">Belum ada pesanan.</p>
-          ) : (
-            recentOrders.map(order => (
-              <div key={order.id} className="px-6 py-4 flex items-center justify-between gap-4">
-                <div className="min-w-0">
-                  <p className="font-medium text-slate-900 text-sm truncate">{order.nama_pembeli}</p>
-                  <p className="text-xs text-slate-500 truncate">{order.book?.judul} — {order.qty} eks</p>
-                </div>
-                <div className="text-right shrink-0">
-                  <p className="text-sm font-semibold text-indigo-700">Rp {order.total?.toLocaleString('id-ID')}</p>
-                  <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${statusColors[order.status]}`}>
-                    {order.status}
-                  </span>
-                </div>
-              </div>
-            ))
-          )}
+
+        {/* Chart Visualization */}
+        <div className="bg-white rounded-2xl border border-slate-100 p-6 flex flex-col justify-between">
+          <div>
+            <h2 className="font-semibold text-slate-900 mb-5">Statistik Konten</h2>
+            <div className="space-y-4">
+              {[
+                { label: 'Buku Penerbitan', val: stats.books || 0, color: 'bg-indigo-600', text: 'text-indigo-600' },
+                { label: 'Pesanan Buku', val: stats.orders || 0, color: 'bg-amber-500', text: 'text-amber-600' },
+                { label: 'Testimonial', val: stats.testimonials || 0, color: 'bg-violet-600', text: 'text-violet-600' },
+                { label: 'Promo & Berita', val: stats.promos || 0, color: 'bg-sky-500', text: 'text-sky-600' },
+                { label: 'Portofolio Cetak', val: stats.portfolios || 0, color: 'bg-emerald-500', text: 'text-emerald-600' },
+              ].map((item, idx) => {
+                const maxVal = Math.max(stats.books || 1, stats.orders || 1, stats.testimonials || 1, stats.promos || 1, stats.portfolios || 1, 10);
+                const widthPct = Math.min(100, (item.val / maxVal) * 100);
+                return (
+                  <div key={idx} className="space-y-1.5">
+                    <div className="flex items-center justify-between text-xs font-semibold">
+                      <span className="text-slate-600">{item.label}</span>
+                      <span className={`${item.text} bg-slate-50 px-2 py-0.5 rounded-full border border-slate-100`}>{item.val} item</span>
+                    </div>
+                    <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                      <div
+                        style={{ width: `${widthPct}%` }}
+                        className={`h-full ${item.color} rounded-full transition-all duration-700 ease-out`}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+            <span>Visualisasi Distribusi Konten</span>
+            <span className="flex items-center gap-1 text-indigo-600 font-medium">
+              <TrendingUp className="w-3.5 h-3.5 animate-pulse" /> Live System
+            </span>
+          </div>
         </div>
       </div>
     </div>

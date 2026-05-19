@@ -1,7 +1,20 @@
 import { Link } from 'react-router-dom';
 import { BookOpen, Phone, Mail, Share2, MessageCircle } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import api from '../services/api';
 
 export default function Footer() {
+  const [settings, setSettings] = useState({ contact_wa: '6281234567890', contact_email: 'info@mediafikra.com' });
+
+  useEffect(() => {
+    api.get('/settings').then(r => {
+      setSettings(prev => ({ ...prev, ...r.data }));
+    }).catch(() => {});
+  }, []);
+
+  // Format WA display: e.g. +62 812-3456-7890
+  const formattedWa = settings.contact_wa ? `+${settings.contact_wa}` : '+62 812-3456-7890';
+
   return (
     <footer className="bg-slate-900 text-slate-400 mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -21,7 +34,7 @@ export default function Footer() {
               <a href="#" className="p-2 bg-slate-800 rounded-lg hover:bg-indigo-700 transition-colors">
                 <Share2 className="w-4 h-4" />
               </a>
-              <a href="#" className="p-2 bg-slate-800 rounded-lg hover:bg-indigo-700 transition-colors">
+              <a href={`https://wa.me/${settings.contact_wa}`} className="p-2 bg-slate-800 rounded-lg hover:bg-indigo-700 transition-colors">
                 <MessageCircle className="w-4 h-4" />
               </a>
             </div>
@@ -43,11 +56,11 @@ export default function Footer() {
             <ul className="space-y-2 text-sm">
               <li className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-indigo-400 shrink-0" />
-                <span>+62 812-3456-7890</span>
+                <a href={`https://wa.me/${settings.contact_wa}`} className="hover:text-white transition-colors">{formattedWa}</a>
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-indigo-400 shrink-0" />
-                <span>info@mediafikra.com</span>
+                <a href={`mailto:${settings.contact_email}`} className="hover:text-white transition-colors">{settings.contact_email}</a>
               </li>
             </ul>
           </div>

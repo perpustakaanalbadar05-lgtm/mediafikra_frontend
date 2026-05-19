@@ -68,6 +68,13 @@ export default function HomePage() {
     api.get('/settings').then(r => setSettings(prev => ({ ...prev, ...r.data }))).catch(() => {});
   }, []);
 
+  const getImageUrl = (path) => {
+    if (!path) return '';
+    if (path.startsWith('http')) return path;
+    const base = (import.meta.env.VITE_API_URL || 'http://localhost:8000/api').replace('/api', '');
+    return `${base}${path}`;
+  };
+
   return (
     <div>
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
@@ -175,12 +182,16 @@ export default function HomePage() {
                   to={`/katalog/${book.id}`}
                   className="group bg-white rounded-2xl border border-slate-100 overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-200"
                 >
-                  <div className="h-48 bg-gradient-to-br from-indigo-100 to-violet-100 flex items-center justify-center">
-                    <BookOpen className="w-16 h-16 text-indigo-300" />
+                  <div className="h-48 bg-gradient-to-br from-indigo-100 to-violet-100 flex items-center justify-center overflow-hidden relative">
+                    {book.cover_image ? (
+                      <img src={getImageUrl(book.cover_image)} alt={book.judul} className="w-full h-full object-cover" />
+                    ) : (
+                      <BookOpen className="w-16 h-16 text-indigo-300" />
+                    )}
                   </div>
                   <div className="p-4">
                     <span className="text-xs font-medium text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full">{book.kategori}</span>
-                    <h3 className="font-semibold text-slate-900 mt-2 mb-1 line-clamp-2 group-hover:text-indigo-700 transition-colors">{book.judul}</h3>
+                    <h3 className="font-semibold text-slate-900 mt-2 mb-1 line-clamp-2 group-hover:text-indigo-700 transition-colors text-sm">{book.judul}</h3>
                     <p className="font-bold text-indigo-700">Rp {book.harga?.toLocaleString('id-ID')}</p>
                   </div>
                 </Link>
@@ -204,9 +215,13 @@ export default function HomePage() {
                   <StarRating rating={t.rating} />
                   <p className="text-slate-600 text-sm leading-relaxed my-4 italic">"{t.isi_review}"</p>
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center font-bold text-indigo-700 text-sm">
-                      {t.nama.charAt(0)}
-                    </div>
+                    {t.foto ? (
+                      <img src={getImageUrl(t.foto)} alt={t.nama} className="w-10 h-10 rounded-full object-cover" />
+                    ) : (
+                      <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center font-bold text-indigo-700 text-sm">
+                        {t.nama.charAt(0)}
+                      </div>
+                    )}
                     <div>
                       <p className="font-semibold text-slate-900 text-sm">{t.nama}</p>
                       <p className="text-xs text-slate-500">{t.jabatan}</p>
@@ -234,18 +249,22 @@ export default function HomePage() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {promos.map(p => (
-                <div key={p.id} className="group bg-white rounded-2xl border border-slate-100 overflow-hidden hover:shadow-lg transition-all hover:-translate-y-1 duration-200">
-                  <div className="h-40 bg-gradient-to-br from-slate-100 to-indigo-100 flex items-center justify-center">
-                    <Sparkles className="w-12 h-12 text-indigo-300" />
+                <Link key={p.id} to={`/promo/${p.id}`} className="group bg-white rounded-2xl border border-slate-100 overflow-hidden hover:shadow-lg transition-all hover:-translate-y-1 duration-200">
+                  <div className="h-40 bg-gradient-to-br from-slate-100 to-indigo-100 flex items-center justify-center relative overflow-hidden">
+                    {p.thumbnail ? (
+                      <img src={getImageUrl(p.thumbnail)} alt={p.judul} className="w-full h-full object-cover animate-image" />
+                    ) : (
+                      <Sparkles className="w-12 h-12 text-indigo-300" />
+                    )}
                   </div>
                   <div className="p-5">
                     <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${p.type === 'promo' ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'}`}>
                       {p.type === 'promo' ? '🔥 Promo' : '📰 Berita'}
                     </span>
-                    <h3 className="font-semibold text-slate-900 mt-2 mb-2 line-clamp-2 group-hover:text-indigo-700 transition-colors">{p.judul}</h3>
+                    <h3 className="font-semibold text-slate-900 mt-2 mb-2 line-clamp-2 group-hover:text-indigo-700 transition-colors text-sm">{p.judul}</h3>
                     <p className="text-sm text-slate-500 line-clamp-3">{p.isi}</p>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           </div>
@@ -261,7 +280,7 @@ export default function HomePage() {
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <a
-              href="https://wa.me/6281234567890"
+              href={`https://wa.me/${settings.contact_wa}`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-8 py-3.5 bg-white text-indigo-700 font-bold rounded-xl hover:bg-indigo-50 transition-colors shadow-lg"

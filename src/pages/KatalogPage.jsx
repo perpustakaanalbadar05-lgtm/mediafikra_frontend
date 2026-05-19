@@ -23,6 +23,13 @@ export default function KatalogPage() {
       .finally(() => setLoading(false));
   }, [search, kategori]);
 
+  const getImageUrl = (path) => {
+    if (!path) return '';
+    if (path.startsWith('http')) return path;
+    const base = (import.meta.env.VITE_API_URL || 'http://localhost:8000/api').replace('/api', '');
+    return `${base}${path}`;
+  };
+
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Header */}
@@ -93,10 +100,14 @@ export default function KatalogPage() {
                 to={`/katalog/${book.id}`}
                 className="group bg-white rounded-2xl border border-slate-100 overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-200"
               >
-                <div className="h-48 bg-gradient-to-br from-indigo-100 to-violet-100 flex items-center justify-center relative">
-                  <BookOpen className="w-16 h-16 text-indigo-300" />
+                <div className="h-48 bg-gradient-to-br from-indigo-100 to-violet-100 flex items-center justify-center relative overflow-hidden">
+                  {book.cover_image ? (
+                    <img src={getImageUrl(book.cover_image)} alt={book.judul} className="w-full h-full object-cover" />
+                  ) : (
+                    <BookOpen className="w-16 h-16 text-indigo-300" />
+                  )}
                   {book.featured && (
-                    <span className="absolute top-3 left-3 bg-amber-400 text-amber-900 text-xs font-bold px-2 py-0.5 rounded-full">
+                    <span className="absolute top-3 left-3 bg-amber-400 text-amber-900 text-xs font-bold px-2 py-0.5 rounded-full z-10">
                       Unggulan
                     </span>
                   )}

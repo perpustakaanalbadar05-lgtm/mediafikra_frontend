@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Plus, Pencil, Trash2, X } from 'lucide-react';
 import api from '../../services/api';
 
-const EMPTY = { judul: '', isi: '', type: 'promo', status_publish: true };
+const EMPTY = { judul: '', isi: '', type: 'promo', status_publish: true, thumbnail: null };
 
 export default function AdminPromoPage() {
   const [items, setItems] = useState([]);
@@ -20,7 +20,7 @@ export default function AdminPromoPage() {
 
   const openCreate = () => { setForm(EMPTY); setEditId(null); setError(''); setShowModal(true); };
   const openEdit = (item) => {
-    setForm({ judul: item.judul, isi: item.isi, type: item.type, status_publish: item.status_publish });
+    setForm({ judul: item.judul, isi: item.isi, type: item.type, status_publish: item.status_publish, thumbnail: null });
     setEditId(item.id);
     setError('');
     setShowModal(true);
@@ -31,8 +31,25 @@ export default function AdminPromoPage() {
     setSaving(true);
     setError('');
     try {
-      if (editId) await api.put(`/admin/promos/${editId}`, form);
-      else await api.post('/admin/promos', form);
+      const formData = new FormData();
+      formData.append('judul', form.judul);
+      formData.append('isi', form.isi);
+      formData.append('type', form.type);
+      formData.append('status_publish', form.status_publish ? 1 : 0);
+      if (form.thumbnail) {
+        formData.append('thumbnail', form.thumbnail);
+      }
+
+      if (editId) {
+        formData.append('_method', 'PUT');
+        await api.post(`/admin/promos/${editId}`, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
+      } else {
+        await api.post('/admin/promos', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
+      }
       setShowModal(false);
       fetchItems();
     } catch (err) {
@@ -130,6 +147,11 @@ export default function AdminPromoPage() {
                   <option value="promo">Promo</option>
                   <option value="berita">Berita</option>
                 </select>
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">Thumbnail (Opsional, Max 2MB)</label>
+                <input type="file" accept="image/*" onChange={e => setForm({...form, thumbnail: e.target.files[0]})}
+                  className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-indigo-500" />
               </div>
               <div>
                 <label className="block text-xs font-semibold text-slate-700 mb-1">Isi Konten *</label>

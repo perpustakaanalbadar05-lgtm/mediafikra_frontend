@@ -43,6 +43,13 @@ export default function DetailBukuPage() {
 
   if (!book) return null;
 
+  const getImageUrl = (path) => {
+    if (!path) return '';
+    if (path.startsWith('http')) return path;
+    const base = (import.meta.env.VITE_API_URL || 'http://localhost:8000/api').replace('/api', '');
+    return `${base}${path}`;
+  };
+
   const total = book.harga * form.qty;
 
   return (
@@ -55,8 +62,12 @@ export default function DetailBukuPage() {
         <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
             {/* Cover */}
-            <div className="h-72 md:h-auto bg-gradient-to-br from-indigo-100 to-violet-100 flex items-center justify-center min-h-64">
-              <BookOpen className="w-24 h-24 text-indigo-300" />
+            <div className="h-72 md:h-auto bg-gradient-to-br from-indigo-100 to-violet-100 flex items-center justify-center min-h-64 overflow-hidden relative">
+              {book.cover_image ? (
+                <img src={getImageUrl(book.cover_image)} alt={book.judul} className="w-full h-full object-cover" />
+              ) : (
+                <BookOpen className="w-24 h-24 text-indigo-300" />
+              )}
             </div>
 
             {/* Info */}

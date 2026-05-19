@@ -1,5 +1,5 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BookOpen, Menu, X } from 'lucide-react';
 
 const links = [
@@ -8,6 +8,7 @@ const links = [
   { to: '/katalog', label: 'Katalog' },
   { to: '/portofolio', label: 'Portofolio' },
   { to: '/testimoni', label: 'Testimoni' },
+  { to: '/promo', label: 'Promo' },
   { to: '/tentang', label: 'Tentang' },
   { to: '/kontak', label: 'Kontak' },
   { to: '/faq', label: 'FAQ' },
@@ -15,6 +16,13 @@ const links = [
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const [wa, setWa] = useState('6281234567890');
+
+  useEffect(() => {
+    api.get('/settings').then(r => {
+      if (r.data.contact_wa) setWa(r.data.contact_wa);
+    }).catch(() => {});
+  }, []);
 
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-100 shadow-sm">
@@ -27,7 +35,7 @@ export default function Navbar() {
             </div>
             Media Fikra
           </Link>
-
+ 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-1">
             {links.map(l => (
@@ -38,7 +46,7 @@ export default function Navbar() {
                 className={({ isActive }) =>
                   `px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
                     isActive
-                      ? 'text-indigo-700 bg-indigo-50'
+                       ? 'text-indigo-700 bg-indigo-50'
                       : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
                   }`
                 }
@@ -47,11 +55,11 @@ export default function Navbar() {
               </NavLink>
             ))}
           </nav>
-
+ 
           {/* CTA */}
           <div className="hidden md:block">
             <a
-              href="https://wa.me/6281234567890"
+              href={`https://wa.me/${wa}`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-700 text-white text-sm font-medium rounded-lg hover:bg-indigo-800 transition-colors"
@@ -89,7 +97,7 @@ export default function Navbar() {
             </NavLink>
           ))}
           <a
-            href="https://wa.me/6281234567890"
+            href={`https://wa.me/${wa}`}
             className="block mt-2 text-center px-4 py-2 bg-indigo-700 text-white rounded-lg text-sm font-medium"
           >
             Konsultasi Gratis
