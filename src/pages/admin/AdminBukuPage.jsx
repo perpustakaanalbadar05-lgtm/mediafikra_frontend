@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Plus, Pencil, Trash2, X, BookOpen, ToggleLeft, ToggleRight } from 'lucide-react';
 import api from '../../services/api';
 
-const EMPTY = { judul: '', deskripsi: '', harga: '', stok: '', kategori: '', cover_image: null, featured: false, status_publish: true };
+const EMPTY = { judul: '', deskripsi: '', sinopsis: '', harga: '', stok: '', kategori: '', cover_image: null, featured: false, status_publish: true };
 
 export default function AdminBukuPage() {
   const [books, setBooks] = useState([]);
@@ -21,7 +21,7 @@ export default function AdminBukuPage() {
 
   const openCreate = () => { setForm(EMPTY); setEditId(null); setError(''); setShowModal(true); };
   const openEdit = (book) => {
-    setForm({ judul: book.judul, deskripsi: book.deskripsi || '', harga: book.harga, stok: book.stok, kategori: book.kategori || '', cover_image: null, featured: book.featured, status_publish: book.status_publish });
+    setForm({ judul: book.judul, deskripsi: book.deskripsi || '', sinopsis: book.sinopsis || '', harga: book.harga, stok: book.stok, kategori: book.kategori || '', cover_image: null, featured: book.featured, status_publish: book.status_publish });
     setEditId(book.id);
     setError('');
     setShowModal(true);
@@ -35,6 +35,7 @@ export default function AdminBukuPage() {
       const formData = new FormData();
       formData.append('judul', form.judul);
       formData.append('deskripsi', form.deskripsi);
+      formData.append('sinopsis', form.sinopsis);
       formData.append('harga', form.harga);
       formData.append('stok', form.stok);
       formData.append('kategori', form.kategori);
@@ -173,9 +174,14 @@ export default function AdminBukuPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Deskripsi</label>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">Deskripsi Singkat</label>
                 <textarea value={form.deskripsi} onChange={e => setForm({ ...form, deskripsi: e.target.value })}
-                  rows={3} className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none resize-none" />
+                  rows={2} className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none resize-none" />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">Sinopsis Lengkap</label>
+                <textarea value={form.sinopsis} onChange={e => setForm({ ...form, sinopsis: e.target.value })}
+                  rows={5} className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none resize-none" />
               </div>
               <div className="flex gap-6">
                 <label className="flex items-center gap-2 text-sm cursor-pointer">

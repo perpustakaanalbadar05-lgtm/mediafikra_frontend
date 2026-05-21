@@ -23,6 +23,13 @@ export default function TestimoniPage() {
       .finally(() => setLoading(false));
   }, []);
 
+  const getImageUrl = (path) => {
+    if (!path) return '';
+    if (path.startsWith('http')) return path;
+    const base = (import.meta.env.VITE_API_URL || 'http://localhost:8000/api').replace('/api', '');
+    return `${base}${path}`;
+  };
+
   return (
     <div className="min-h-screen bg-slate-50">
       <div className="bg-white border-b border-slate-100 py-12">
@@ -54,9 +61,13 @@ export default function TestimoniPage() {
                 <StarRating rating={t.rating} />
                 <p className="text-slate-600 text-sm leading-relaxed my-4 italic">&ldquo;{t.isi_review}&rdquo;</p>
                 <div className="flex items-center gap-3 mt-auto">
-                  <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center font-bold text-indigo-700 text-sm shrink-0">
-                    {t.nama.charAt(0)}
-                  </div>
+                  {t.foto ? (
+                    <img src={getImageUrl(t.foto)} alt={t.nama} className="w-10 h-10 rounded-full object-cover shrink-0" />
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center font-bold text-indigo-700 text-sm shrink-0">
+                      {t.nama.charAt(0)}
+                    </div>
+                  )}
                   <div>
                     <p className="font-semibold text-slate-900 text-sm">{t.nama}</p>
                     {t.jabatan && <p className="text-xs text-slate-500">{t.jabatan}</p>}

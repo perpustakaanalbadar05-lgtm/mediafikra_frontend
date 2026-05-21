@@ -1,6 +1,7 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { BookOpen, Menu, X } from 'lucide-react';
+import api from '../services/api';
 
 const links = [
   { to: '/', label: 'Beranda' },

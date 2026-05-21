@@ -53,7 +53,9 @@ export default function AdminPortofolioPage() {
       }
       setShowModal(false);
       fetch();
-    } catch (_) {}
+    } catch (err) {
+      alert(err.response?.data?.message || 'Gagal menyimpan data');
+    }
     finally { setSaving(false); }
   };
 

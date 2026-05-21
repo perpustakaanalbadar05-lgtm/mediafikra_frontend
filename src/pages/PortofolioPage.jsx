@@ -13,6 +13,13 @@ export default function PortofolioPage() {
       .finally(() => setLoading(false));
   }, []);
 
+  const getImageUrl = (path) => {
+    if (!path) return '';
+    if (path.startsWith('http')) return path;
+    const base = (import.meta.env.VITE_API_URL || 'http://localhost:8000/api').replace('/api', '');
+    return `${base}${path}`;
+  };
+
   return (
     <div className="min-h-screen bg-slate-50">
       <div className="bg-white border-b border-slate-100 py-12">
@@ -40,8 +47,12 @@ export default function PortofolioPage() {
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
             {portfolios.map(p => (
               <div key={p.id} className="group bg-white rounded-2xl border border-slate-100 overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-200">
-                <div className="h-52 bg-gradient-to-br from-indigo-100 via-violet-100 to-purple-100 flex items-center justify-center">
-                  <BookOpen className="w-12 h-12 text-indigo-300" />
+                <div className="h-52 overflow-hidden bg-gradient-to-br from-indigo-100 via-violet-100 to-purple-100 flex items-center justify-center">
+                  {p.cover ? (
+                    <img src={getImageUrl(p.cover)} alt={p.judul} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                  ) : (
+                    <BookOpen className="w-12 h-12 text-indigo-300" />
+                  )}
                 </div>
                 <div className="p-3">
                   {p.kategori && (

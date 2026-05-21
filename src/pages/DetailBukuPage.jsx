@@ -81,7 +81,20 @@ export default function DetailBukuPage() {
                 {book.kategori}
               </span>
               <h1 className="text-2xl font-bold text-slate-900 mb-3">{book.judul}</h1>
-              <p className="text-slate-500 text-sm leading-relaxed mb-6">{book.deskripsi}</p>
+              {book.deskripsi && (
+                <p className="text-slate-500 text-sm leading-relaxed mb-4">{book.deskripsi}</p>
+              )}
+              
+              {book.sinopsis && (
+                <div className="mb-6 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                  <h3 className="text-sm font-bold text-slate-900 mb-2">Sinopsis Buku:</h3>
+                  <div className="text-slate-600 text-sm leading-relaxed">
+                    {book.sinopsis.split('\n').map((line, idx) => (
+                      <p key={idx} className="mb-2 last:mb-0">{line}</p>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               <div className="flex items-center gap-4 mb-6">
                 <span className="text-3xl font-bold text-indigo-700">
