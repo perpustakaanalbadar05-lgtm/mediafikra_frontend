@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { BookOpen, ArrowLeft, ShoppingCart, MessageCircle, CheckCircle } from 'lucide-react';
+import { BookOpen, ArrowLeft, ShoppingCart, MessageCircle, CheckCircle, Share2, Facebook, Twitter, Link } from 'lucide-react';
 import api from '../services/api';
 
 export default function DetailBukuPage() {
@@ -103,6 +103,23 @@ export default function DetailBukuPage() {
                 <span className={`text-sm font-medium ${book.stok > 0 ? 'text-emerald-600' : 'text-red-500'}`}>
                   {book.stok > 0 ? `✓ Tersedia (${book.stok} eks)` : '✗ Stok Habis'}
                 </span>
+              </div>
+
+              {/* Share Buttons */}
+              <div className="flex items-center gap-3 mb-6">
+                <span className="text-sm text-slate-500 flex items-center gap-1"><Share2 className="w-4 h-4" /> Bagikan:</span>
+                <button onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent('Cek buku ini: ' + book.judul + ' ' + window.location.href)}`, '_blank')} className="p-2 bg-green-50 text-green-600 rounded-full hover:bg-green-100 transition-colors" title="Share ke WhatsApp">
+                  <MessageCircle className="w-4 h-4" />
+                </button>
+                <button onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank')} className="p-2 bg-blue-50 text-blue-600 rounded-full hover:bg-blue-100 transition-colors" title="Share ke Facebook">
+                  <Facebook className="w-4 h-4" />
+                </button>
+                <button onClick={() => window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(book.judul)}`, '_blank')} className="p-2 bg-sky-50 text-sky-600 rounded-full hover:bg-sky-100 transition-colors" title="Share ke Twitter">
+                  <Twitter className="w-4 h-4" />
+                </button>
+                <button onClick={() => { navigator.clipboard.writeText(window.location.href); alert('Link berhasil disalin!'); }} className="p-2 bg-slate-100 text-slate-600 rounded-full hover:bg-slate-200 transition-colors" title="Copy Link">
+                  <Link className="w-4 h-4" />
+                </button>
               </div>
 
               {!showCheckout ? (
