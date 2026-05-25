@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { BookOpen, ArrowLeft, ShoppingCart, MessageCircle, CheckCircle, Share2, Facebook, Twitter, Link } from 'lucide-react';
+import { BookOpen, ArrowLeft, ShoppingCart, MessageCircle, CheckCircle, Share2, Link } from 'lucide-react';
 import api from '../services/api';
 
 export default function DetailBukuPage() {
@@ -112,10 +112,10 @@ export default function DetailBukuPage() {
                   <MessageCircle className="w-4 h-4" />
                 </button>
                 <button onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank')} className="p-2 bg-blue-50 text-blue-600 rounded-full hover:bg-blue-100 transition-colors" title="Share ke Facebook">
-                  <Facebook className="w-4 h-4" />
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
                 </button>
                 <button onClick={() => window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(book.judul)}`, '_blank')} className="p-2 bg-sky-50 text-sky-600 rounded-full hover:bg-sky-100 transition-colors" title="Share ke Twitter">
-                  <Twitter className="w-4 h-4" />
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>
                 </button>
                 <button onClick={() => { navigator.clipboard.writeText(window.location.href); alert('Link berhasil disalin!'); }} className="p-2 bg-slate-100 text-slate-600 rounded-full hover:bg-slate-200 transition-colors" title="Copy Link">
                   <Link className="w-4 h-4" />
