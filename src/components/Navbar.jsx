@@ -2,6 +2,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { BookOpen, Menu, X } from 'lucide-react';
 import api from '../services/api';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const links = [
   { to: '/', label: 'Beranda' },
@@ -59,52 +60,72 @@ export default function Navbar() {
  
           {/* CTA */}
           <div className="hidden md:block">
-            <a
+            <motion.a
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               href={`https://wa.me/${wa}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-700 text-white text-sm font-medium rounded-lg hover:bg-indigo-800 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-700 text-white text-sm font-medium rounded-lg hover:bg-indigo-800 transition-colors shadow-sm shadow-indigo-200"
             >
               Konsultasi Gratis
-            </a>
+            </motion.a>
           </div>
 
           {/* Mobile toggle */}
           <button
             onClick={() => setOpen(!open)}
-            className="md:hidden p-2 rounded-md text-slate-600 hover:bg-slate-100"
+            className="md:hidden p-2 rounded-md text-slate-600 hover:bg-slate-100 transition-colors"
           >
-            {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            <AnimatePresence mode="wait">
+              {open ? (
+                <motion.div key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.2 }}>
+                  <X className="w-5 h-5" />
+                </motion.div>
+              ) : (
+                <motion.div key="menu" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.2 }}>
+                  <Menu className="w-5 h-5" />
+                </motion.div>
+              )}
+            </AnimatePresence>
           </button>
         </div>
       </div>
 
       {/* Mobile Menu */}
-      {open && (
-        <div className="md:hidden border-t border-slate-100 bg-white px-4 py-3 space-y-1">
-          {links.map(l => (
-            <NavLink
-              key={l.to}
-              to={l.to}
-              end={l.to === '/'}
-              onClick={() => setOpen(false)}
-              className={({ isActive }) =>
-                `block px-3 py-2 rounded-md text-sm font-medium ${
-                  isActive ? 'text-indigo-700 bg-indigo-50' : 'text-slate-700'
-                }`
-              }
-            >
-              {l.label}
-            </NavLink>
-          ))}
-          <a
-            href={`https://wa.me/${wa}`}
-            className="block mt-2 text-center px-4 py-2 bg-indigo-700 text-white rounded-lg text-sm font-medium"
+      <AnimatePresence>
+        {open && (
+          <motion.div 
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="md:hidden border-t border-slate-100 bg-white px-4 py-3 space-y-1 overflow-hidden"
           >
-            Konsultasi Gratis
-          </a>
-        </div>
-      )}
+            {links.map(l => (
+              <NavLink
+                key={l.to}
+                to={l.to}
+                end={l.to === '/'}
+                onClick={() => setOpen(false)}
+                className={({ isActive }) =>
+                  `block px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                    isActive ? 'text-indigo-700 bg-indigo-50' : 'text-slate-700 hover:bg-slate-50'
+                  }`
+                }
+              >
+                {l.label}
+              </NavLink>
+            ))}
+            <a
+              href={`https://wa.me/${wa}`}
+              className="block mt-2 text-center px-4 py-2 bg-indigo-700 text-white rounded-lg text-sm font-medium transition-colors hover:bg-indigo-800"
+            >
+              Konsultasi Gratis
+            </a>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

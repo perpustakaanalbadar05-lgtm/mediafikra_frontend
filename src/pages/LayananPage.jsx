@@ -1,6 +1,17 @@
 import { BookOpen, FileText, Sparkles, Award, CheckCircle, ArrowRight, MessageCircle } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import api from '../services/api';
+import { motion } from 'framer-motion';
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+};
 
 const services = [
   {
@@ -60,21 +71,27 @@ export default function LayananPage() {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Header */}
-      <div className="bg-white border-b border-slate-100 py-16">
+      <motion.div 
+        initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer}
+        className="bg-white border-b border-slate-100 py-16"
+      >
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h1 className="text-3xl font-bold text-slate-900 mb-3">Layanan Media Fikra</h1>
-          <p className="text-slate-500 leading-relaxed">
+          <motion.h1 variants={fadeInUp} className="text-3xl font-bold text-slate-900 mb-3">Layanan Media Fikra</motion.h1>
+          <motion.p variants={fadeInUp} className="text-slate-500 leading-relaxed">
             Solusi penerbitan dan publikasi terlengkap untuk kebutuhan akademik, profesional, dan personal Anda.
-          </p>
+          </motion.p>
         </div>
-      </div>
+      </motion.div>
 
       {/* Services */}
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-14 space-y-8">
+      <motion.div 
+        initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={staggerContainer}
+        className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-14 space-y-8"
+      >
         {services.map((s, i) => {
           const c = colorMap[s.color];
           return (
-            <div key={i} className={`bg-white rounded-2xl border ${c.border} overflow-hidden shadow-sm`}>
+            <motion.div variants={fadeInUp} key={i} className={`bg-white rounded-2xl border ${c.border} overflow-hidden shadow-sm hover:shadow-md transition-shadow`}>
               <div className={`${c.bg} px-8 py-6 flex items-center gap-4`}>
                 <div className={`${c.icon} p-3 rounded-xl`}>
                   <s.icon className="w-6 h-6 text-white" />
@@ -87,7 +104,9 @@ export default function LayananPage() {
               <div className="px-8 py-6 grid md:grid-cols-2 gap-6">
                 <div>
                   <p className="text-slate-600 leading-relaxed text-sm">{s.desc}</p>
-                  <a
+                  <motion.a
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                     href={`https://wa.me/${wa}?text=${encodeURIComponent(s.wa)}`}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -95,7 +114,7 @@ export default function LayananPage() {
                   >
                     <MessageCircle className="w-4 h-4" />
                     Konsultasi Layanan Ini
-                  </a>
+                  </motion.a>
                 </div>
                 <div>
                   <p className="font-semibold text-slate-700 text-sm mb-3">Alur Proses:</p>
@@ -109,27 +128,33 @@ export default function LayananPage() {
                   </ul>
                 </div>
               </div>
-            </div>
+            </motion.div>
           );
         })}
-      </div>
+      </motion.div>
 
       {/* CTA */}
-      <div className="bg-indigo-700 text-white py-14">
+      <motion.div 
+        initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer}
+        className="bg-indigo-700 text-white py-14"
+      >
         <div className="max-w-3xl mx-auto px-4 text-center">
-          <h2 className="text-2xl font-bold mb-3">Butuh Bantuan Memilih Layanan?</h2>
-          <p className="text-indigo-200 mb-6 text-sm">Konsultasi gratis dengan tim kami dan kami akan merekomendasikan layanan yang paling sesuai untuk Anda.</p>
-          <a
+          <motion.h2 variants={fadeInUp} className="text-2xl font-bold mb-3">Butuh Bantuan Memilih Layanan?</motion.h2>
+          <motion.p variants={fadeInUp} className="text-indigo-200 mb-6 text-sm">Konsultasi gratis dengan tim kami dan kami akan merekomendasikan layanan yang paling sesuai untuk Anda.</motion.p>
+          <motion.a
+            variants={fadeInUp}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             href={`https://wa.me/${wa}?text=Halo Media Fikra, saya ingin konsultasi tentang layanan penerbitan`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-white text-indigo-700 font-bold rounded-xl hover:bg-indigo-50 transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-white text-indigo-700 font-bold rounded-xl hover:bg-indigo-50 transition-colors shadow-lg shadow-indigo-900/20"
           >
             <MessageCircle className="w-5 h-5" />
             Chat WhatsApp Sekarang
-          </a>
+          </motion.a>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

@@ -1,6 +1,17 @@
 import { useState, useEffect } from 'react';
 import { BookOpen } from 'lucide-react';
 import api from '../services/api';
+import { motion } from 'framer-motion';
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+};
 
 export default function PortofolioPage() {
   const [portfolios, setPortfolios] = useState([]);
@@ -22,12 +33,15 @@ export default function PortofolioPage() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <div className="bg-white border-b border-slate-100 py-12">
+      <motion.div 
+        initial="hidden" animate="visible" variants={staggerContainer}
+        className="bg-white border-b border-slate-100 py-12"
+      >
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h1 className="text-3xl font-bold text-slate-900 mb-3">Portofolio Buku Cetak</h1>
-          <p className="text-slate-500">Karya-karya yang telah kami bantu wujudkan bersama para penulis</p>
+          <motion.h1 variants={fadeInUp} className="text-3xl font-bold text-slate-900 mb-3">Portofolio Buku Cetak</motion.h1>
+          <motion.p variants={fadeInUp} className="text-slate-500">Karya-karya yang telah kami bantu wujudkan bersama para penulis</motion.p>
         </div>
-      </div>
+      </motion.div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {loading ? (
@@ -44,14 +58,23 @@ export default function PortofolioPage() {
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
+          <motion.div 
+            initial="hidden" animate="visible" variants={staggerContainer}
+            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5"
+          >
             {portfolios.map(p => (
-              <div key={p.id} className="group bg-white rounded-2xl border border-slate-100 overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-200">
-                <div className="h-52 overflow-hidden bg-gradient-to-br from-indigo-100 via-violet-100 to-purple-100 flex items-center justify-center">
+              <motion.div variants={fadeInUp} key={p.id} className="group bg-white rounded-2xl border border-slate-100 overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                <div className="h-52 overflow-hidden bg-gradient-to-br from-indigo-100 via-violet-100 to-purple-100 flex items-center justify-center relative">
                   {p.cover ? (
-                    <img src={getImageUrl(p.cover)} alt={p.judul} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                    <motion.img 
+                      whileHover={{ scale: 1.1 }}
+                      transition={{ duration: 0.5 }}
+                      src={getImageUrl(p.cover)} 
+                      alt={p.judul} 
+                      className="w-full h-full object-cover" 
+                    />
                   ) : (
-                    <BookOpen className="w-12 h-12 text-indigo-300" />
+                    <BookOpen className="w-12 h-12 text-indigo-300 group-hover:scale-110 transition-transform duration-500" />
                   )}
                 </div>
                 <div className="p-3">
@@ -62,9 +85,9 @@ export default function PortofolioPage() {
                   <p className="text-xs text-slate-500">{p.penulis}</p>
                   {p.tahun && <p className="text-xs text-slate-400 mt-0.5">{p.tahun}</p>}
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         )}
       </div>
     </div>
