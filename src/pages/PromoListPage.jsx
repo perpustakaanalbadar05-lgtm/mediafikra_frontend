@@ -2,6 +2,17 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Sparkles, Calendar, ArrowRight } from 'lucide-react';
 import api from '../services/api';
+import { motion, AnimatePresence } from 'framer-motion';
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+};
 
 export default function PromoListPage() {
   const [promos, setPromos] = useState([]);
@@ -27,17 +38,19 @@ export default function PromoListPage() {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Header */}
-      <div className="bg-white border-b border-slate-100 py-12">
+      <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="bg-white border-b border-slate-100 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-3xl font-bold text-slate-900 mb-3">Promo & Berita</h1>
-          <p className="text-slate-500 max-w-xl mx-auto">
+          <motion.h1 variants={fadeInUp} className="text-3xl font-bold text-slate-900 mb-3">Promo & Berita</motion.h1>
+          <motion.p variants={fadeInUp} className="text-slate-500 max-w-xl mx-auto">
             Temukan informasi terbaru, artikel menarik, dan penawaran promo spesial dari Media Fikra.
-          </p>
+          </motion.p>
 
           {/* Filter */}
-          <div className="flex justify-center gap-2 mt-6">
+          <motion.div variants={fadeInUp} className="flex justify-center gap-2 mt-6">
             {['semua', 'promo', 'berita'].map(f => (
-              <button
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 key={f}
                 onClick={() => setFilter(f)}
                 className={`px-4 py-2 rounded-full text-sm font-semibold capitalize transition-all ${
@@ -47,11 +60,11 @@ export default function PromoListPage() {
                 }`}
               >
                 {f === 'semua' ? 'Semua Info' : f}
-              </button>
+              </motion.button>
             ))}
-          </div>
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -75,12 +88,16 @@ export default function PromoListPage() {
             <p className="text-slate-500">Belum ada promo atau berita yang dipublikasikan.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <motion.div 
+            variants={staggerContainer} initial="hidden" animate="visible"
+            className="grid grid-cols-1 md:grid-cols-3 gap-6"
+          >
+            <AnimatePresence>
             {promos.map(p => (
+              <motion.div layout initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} transition={{ duration: 0.3 }} key={p.id}>
               <Link
-                key={p.id}
                 to={`/promo/${p.id}`}
-                className="group bg-white rounded-2xl border border-slate-100 overflow-hidden hover:shadow-lg transition-all hover:-translate-y-1 duration-200"
+                className="group block bg-white rounded-2xl border border-slate-100 overflow-hidden hover:shadow-lg transition-all hover:-translate-y-1 duration-200"
               >
                 <div className="h-48 bg-gradient-to-br from-slate-100 to-indigo-100 flex items-center justify-center overflow-hidden relative">
                   {p.thumbnail ? (
@@ -105,8 +122,10 @@ export default function PromoListPage() {
                   </div>
                 </div>
               </Link>
+              </motion.div>
             ))}
-          </div>
+            </AnimatePresence>
+          </motion.div>
         )}
       </div>
     </div>

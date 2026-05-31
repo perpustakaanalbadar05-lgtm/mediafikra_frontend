@@ -1,5 +1,16 @@
 import { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+};
 
 const faqs = [
   {
@@ -39,40 +50,48 @@ const faqs = [
 function FAQItem({ faq, index }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
+    <motion.div variants={fadeInUp} className="bg-white rounded-xl border border-slate-100 overflow-hidden">
       <button
         onClick={() => setOpen(!open)}
         className="w-full px-6 py-4 flex items-start justify-between gap-4 text-left hover:bg-slate-50 transition-colors"
       >
         <span className="font-semibold text-slate-900 text-sm">{faq.q}</span>
-        {open ? (
-          <ChevronUp className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
-        ) : (
-          <ChevronDown className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
-        )}
+        <motion.div animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.3 }}>
+          <ChevronDown className={`w-4 h-4 shrink-0 mt-0.5 ${open ? 'text-indigo-600' : 'text-slate-400'}`} />
+        </motion.div>
       </button>
-      {open && (
-        <div className="px-6 pb-5">
-          <p className="text-slate-500 text-sm leading-relaxed">{faq.a}</p>
-        </div>
-      )}
-    </div>
+      <AnimatePresence>
+        {open && (
+          <motion.div 
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="overflow-hidden"
+          >
+            <div className="px-6 pb-5">
+              <p className="text-slate-500 text-sm leading-relaxed">{faq.a}</p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 }
 
 export default function FAQPage() {
   return (
     <div className="min-h-screen bg-slate-50">
-      <div className="bg-white border-b border-slate-100 py-12">
+      <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="bg-white border-b border-slate-100 py-12">
         <div className="max-w-3xl mx-auto px-4 text-center">
-          <h1 className="text-3xl font-bold text-slate-900 mb-3">Pertanyaan Umum (FAQ)</h1>
-          <p className="text-slate-500">Jawaban atas pertanyaan yang paling sering kami terima dari calon penulis dan pelanggan.</p>
+          <motion.h1 variants={fadeInUp} className="text-3xl font-bold text-slate-900 mb-3">Pertanyaan Umum (FAQ)</motion.h1>
+          <motion.p variants={fadeInUp} className="text-slate-500">Jawaban atas pertanyaan yang paling sering kami terima dari calon penulis dan pelanggan.</motion.p>
         </div>
-      </div>
+      </motion.div>
 
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-3">
+      <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-3">
         {faqs.map((faq, i) => <FAQItem key={i} faq={faq} index={i} />)}
-      </div>
+      </motion.div>
 
       <div className="max-w-3xl mx-auto px-4 pb-14">
         <div className="bg-indigo-50 rounded-2xl p-6 border border-indigo-100 text-center">
