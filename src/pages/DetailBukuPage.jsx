@@ -31,6 +31,7 @@ export default function DetailBukuPage() {
       .catch(() => navigate('/katalog'))
       .finally(() => setLoading(false));
       
+      
     fetchReviews();
   }, [id]);
 
@@ -221,12 +222,19 @@ export default function DetailBukuPage() {
                       <input type="number" min={1} max={book.stok} value={form.qty} onChange={e => setForm({...form, qty: e.target.value})}
                         className="w-20 px-3 py-1.5 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none text-center font-semibold" />
                       <div className="ml-auto text-right">
-                        <span className="text-xs text-slate-500 block">Total Pembayaran</span>
+                        <span className="text-xs text-slate-500 block">Total Harga Buku</span>
                         <strong className="text-indigo-700 text-lg">Rp {total?.toLocaleString('id-ID')}</strong>
                       </div>
                     </div>
-                    <textarea value={form.catatan} onChange={e => setForm({...form, catatan: e.target.value})}
-                      placeholder="Catatan tambahan (opsional)" rows={2} className="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none resize-none bg-white shadow-sm" />
+                    
+                    <div className="bg-amber-50 p-4 rounded-xl border border-amber-200">
+                      <p className="text-sm text-amber-800 font-medium leading-relaxed">
+                        ℹ️ <span className="font-bold">Biaya ongkos kirim belum termasuk.</span> Silakan konsultasikan dengan Admin kami melalui WhatsApp terkait pilihan ekspedisi pengiriman dan biayanya.
+                      </p>
+                    </div>
+
+                    <textarea value={form.catatan} onChange={e => setForm({...form, catatan: e.target.value})} placeholder="Catatan tambahan (opsional)" rows={2} className="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none resize-none bg-white shadow-sm" />
+                    
                     <div className="flex gap-3 pt-2">
                       <button type="button" onClick={() => setShowCheckout(false)} className="flex-1 px-4 py-3 border border-slate-200 text-slate-600 font-medium rounded-xl text-sm hover:bg-slate-50 transition-colors">
                         Batal
