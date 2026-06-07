@@ -20,7 +20,7 @@ export default function ArtikelListPage() {
 
   useEffect(() => {
     api.get('/articles')
-      .then(r => setArticles(r.data.filter(a => a.status_publish)))
+      .then(r => setArticles(r.data.filter(a => a.status === 'published')))
       .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
@@ -87,10 +87,10 @@ export default function ArtikelListPage() {
                       {new Date(article.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
                     </div>
                     <h3 className="font-bold text-slate-900 text-lg mb-2 line-clamp-2 hover:text-indigo-600 transition-colors cursor-pointer">
-                      <Link to={`/artikel/${article.slug}`}>{article.judul}</Link>
+                      <Link to={`/artikel/${article.slug}`}>{article.title}</Link>
                     </h3>
                     <p className="text-slate-500 text-sm line-clamp-3 mb-4 flex-1">
-                      {article.isi}
+                      {article.content}
                     </p>
                     <Link to={`/artikel/${article.slug}`} className="inline-flex items-center gap-2 text-sm font-semibold text-indigo-600 hover:text-indigo-700 group mt-auto">
                       Baca Selengkapnya <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
