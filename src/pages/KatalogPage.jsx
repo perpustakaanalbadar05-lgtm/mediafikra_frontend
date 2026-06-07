@@ -24,7 +24,7 @@ export default function KatalogPage() {
 
   useEffect(() => {
     api.get('/categories').then(r => {
-      setCategories(['Semua', ...r.data.map(c => c.nama)]);
+      setCategories(['Semua', ...r.data.map(c => c.name)]);
     }).catch(() => {});
   }, []);
 

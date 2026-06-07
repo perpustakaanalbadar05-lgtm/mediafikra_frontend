@@ -6,6 +6,7 @@ const EMPTY = { judul: '', deskripsi: '', sinopsis: '', harga: '', stok: '', kat
 
 export default function AdminBukuPage() {
   const [books, setBooks] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState(EMPTY);
@@ -17,7 +18,10 @@ export default function AdminBukuPage() {
     api.get('/admin/books').then(r => setBooks(r.data)).finally(() => setLoading(false));
   };
 
-  useEffect(() => { fetchBooks(); }, []);
+  useEffect(() => { 
+    fetchBooks(); 
+    api.get('/categories').then(r => setCategories(r.data)).catch(() => {});
+  }, []);
 
   const openCreate = () => { setForm(EMPTY); setEditId(null); setError(''); setShowModal(true); };
   const openEdit = (book) => {
@@ -147,23 +151,27 @@ export default function AdminBukuPage() {
             </div>
             <form onSubmit={handleSave} className="px-6 py-5 space-y-4">
               {error && <p className="text-red-500 text-sm bg-red-50 p-3 rounded-lg">{error}</p>}
-              {[
-                { label: 'Judul Buku *', key: 'judul', type: 'text', required: true },
-                { label: 'Kategori', key: 'kategori', type: 'text' },
-                { label: 'Harga (Rp) *', key: 'harga', type: 'number', required: true },
-                { label: 'Stok *', key: 'stok', type: 'number', required: true },
-              ].map(f => (
-                <div key={f.key}>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">{f.label}</label>
-                  <input
-                    type={f.type}
-                    required={f.required}
-                    value={form[f.key]}
-                    onChange={e => setForm({ ...form, [f.key]: e.target.value })}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
-                  />
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">Judul Buku *</label>
+                <input required type="text" value={form.judul} onChange={e => setForm({ ...form, judul: e.target.value })} className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none" />
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">Kategori</label>
+                  <select value={form.kategori} onChange={e => setForm({ ...form, kategori: e.target.value })} className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-white">
+                    <option value="">-- Pilih Kategori --</option>
+                    {categories.map(c => <option key={c.id} value={c.name}>{c.name}</option>)}
+                  </select>
                 </div>
-              ))}
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">Harga (Rp) *</label>
+                  <input required type="number" value={form.harga} onChange={e => setForm({ ...form, harga: e.target.value })} className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none" />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">Stok *</label>
+                  <input required type="number" value={form.stok} onChange={e => setForm({ ...form, stok: e.target.value })} className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none" />
+                </div>
+              </div>
               <div>
                 <label className="block text-xs font-semibold text-slate-700 mb-1">Cover Image (Opsional, Max 2MB)</label>
                 <input
