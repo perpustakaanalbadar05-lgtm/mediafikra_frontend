@@ -27,6 +27,10 @@ import AdminPromoPage from './pages/admin/AdminPromoPage';
 import AdminPortofolioPage from './pages/admin/AdminPortofolioPage';
 import AdminUserPage from './pages/admin/AdminUserPage';
 import AdminSettingPage from './pages/admin/AdminSettingPage';
+import AdminKategoriPage from './pages/admin/AdminKategoriPage';
+import AdminArtikelPage from './pages/admin/AdminArtikelPage';
+import ArtikelListPage from './pages/ArtikelListPage';
+import ArtikelDetailPage from './pages/ArtikelDetailPage';
 
 export default function App() {
   return (
@@ -42,6 +46,8 @@ export default function App() {
           <Route element={<PublicLayout><PortofolioPage /></PublicLayout>} path="/portofolio" />
           <Route element={<PublicLayout><PromoListPage /></PublicLayout>} path="/promo" />
           <Route element={<PublicLayout><PromoDetailPage /></PublicLayout>} path="/promo/:id" />
+          <Route element={<PublicLayout><ArtikelListPage /></PublicLayout>} path="/artikel" />
+          <Route element={<PublicLayout><ArtikelDetailPage /></PublicLayout>} path="/artikel/:slug" />
           <Route element={<PublicLayout><TentangPage /></PublicLayout>} path="/tentang" />
           <Route element={<PublicLayout><KontakPage /></PublicLayout>} path="/kontak" />
           <Route element={<PublicLayout><FAQPage /></PublicLayout>} path="/faq" />
@@ -60,9 +66,11 @@ export default function App() {
           >
             <Route index element={<AdminDashboardPage />} />
             <Route path="buku" element={<AdminBukuPage />} />
+            <Route path="kategori" element={<AdminKategoriPage />} />
             <Route path="pesanan" element={<AdminPesananPage />} />
             <Route path="testimoni" element={<AdminTestimoniPage />} />
             <Route path="promo" element={<AdminPromoPage />} />
+            <Route path="artikel" element={<AdminArtikelPage />} />
             <Route path="portofolio" element={<AdminPortofolioPage />} />
             <Route path="pengguna" element={<AdminUserPage />} />
             <Route path="pengaturan" element={<AdminSettingPage />} />

@@ -14,14 +14,19 @@ const staggerContainer = {
   visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
 };
 
-const CATEGORIES = ['Semua', 'Akademik', 'Bisnis', 'Pendidikan', 'Hukum', 'Sastra', 'Penulisan', 'Pertanian', 'Teknologi', 'Ekonomi', 'Sejarah'];
-
 export default function KatalogPage() {
   const [books, setBooks] = useState([]);
+  const [categories, setCategories] = useState(['Semua']);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [kategori, setKategori] = useState('Semua');
   const [searchParams, setSearchParams] = useSearchParams();
+
+  useEffect(() => {
+    api.get('/categories').then(r => {
+      setCategories(['Semua', ...r.data.map(c => c.nama)]);
+    }).catch(() => {});
+  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -68,7 +73,7 @@ export default function KatalogPage() {
 
           {/* Kategori Filter */}
           <motion.div variants={fadeInUp} className="mt-4 flex gap-2 flex-wrap">
-            {CATEGORIES.map(k => (
+            {categories.map(k => (
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { BookOpen, ArrowLeft, ShoppingCart, MessageCircle, CheckCircle, Share2, Link } from 'lucide-react';
+import { BookOpen, ArrowLeft, ShoppingCart, MessageCircle, CheckCircle, Share2, Link, Star } from 'lucide-react';
 import api from '../services/api';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -19,12 +19,24 @@ export default function DetailBukuPage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
 
+  // Review states
+  const [reviews, setReviews] = useState([]);
+  const [reviewForm, setReviewForm] = useState({ reviewer_name: '', rating: '5', comment: '' });
+  const [submittingReview, setSubmittingReview] = useState(false);
+  const [reviewMessage, setReviewMessage] = useState('');
+
   useEffect(() => {
     api.get(`/books/${id}`)
       .then(r => setBook(r.data))
       .catch(() => navigate('/katalog'))
       .finally(() => setLoading(false));
+      
+    fetchReviews();
   }, [id]);
+
+  const fetchReviews = () => {
+    api.get(`/reviews?book_id=${id}`).then(r => setReviews(r.data)).catch(() => {});
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,6 +50,23 @@ export default function DetailBukuPage() {
       setError(err.response?.data?.message || 'Terjadi kesalahan. Coba lagi.');
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handleSubmitReview = async (e) => {
+    e.preventDefault();
+    setSubmittingReview(true);
+    setReviewMessage('');
+    try {
+      await api.post('/reviews', { ...reviewForm, book_id: book.id, rating: Number(reviewForm.rating) });
+      setReviewMessage('Terima kasih! Ulasan berhasil dikirim.');
+      setReviewForm({ reviewer_name: '', rating: '5', comment: '' });
+      fetchReviews();
+      setTimeout(() => setReviewMessage(''), 3000);
+    } catch (err) {
+      setReviewMessage('Gagal mengirim ulasan. Pastikan form diisi dengan benar.');
+    } finally {
+      setSubmittingReview(false);
     }
   };
 
@@ -211,6 +240,67 @@ export default function DetailBukuPage() {
                 )}
               </AnimatePresence>
             </motion.div>
+          </div>
+        </motion.div>
+
+        {/* Reviews Section */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
+          className="mt-10 bg-white rounded-3xl border border-slate-100 p-8 shadow-sm"
+        >
+          <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+            <Star className="w-6 h-6 text-amber-400 fill-amber-400" /> Ulasan Pembaca
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+            {/* List Reviews */}
+            <div className="space-y-6">
+              {reviews.length === 0 ? (
+                <p className="text-slate-500 italic">Belum ada ulasan untuk buku ini. Jadilah yang pertama!</p>
+              ) : (
+                reviews.map(r => (
+                  <div key={r.id} className="border-b border-slate-100 pb-5 last:border-0">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="font-semibold text-slate-800">{r.reviewer_name}</span>
+                      <div className="flex gap-0.5">
+                        {[1,2,3,4,5].map(i => <Star key={i} className={`w-3.5 h-3.5 ${i <= r.rating ? 'text-amber-400 fill-amber-400' : 'text-slate-200'}`} />)}
+                      </div>
+                    </div>
+                    {r.comment && <p className="text-sm text-slate-600">{r.comment}</p>}
+                    <p className="text-xs text-slate-400 mt-2">{new Date(r.created_at).toLocaleDateString('id-ID')}</p>
+                  </div>
+                ))
+              )}
+            </div>
+
+            {/* Form Review */}
+            <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 h-fit">
+              <h3 className="font-bold text-slate-800 mb-4">Tulis Ulasan Anda</h3>
+              <form onSubmit={handleSubmitReview} className="space-y-4">
+                {reviewMessage && <p className={`text-sm p-3 rounded-lg ${reviewMessage.includes('Gagal') ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'}`}>{reviewMessage}</p>}
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">Nama *</label>
+                  <input required value={reviewForm.reviewer_name} onChange={e => setReviewForm({...reviewForm, reviewer_name: e.target.value})} className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 bg-white outline-none" />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">Rating *</label>
+                  <select value={reviewForm.rating} onChange={e => setReviewForm({...reviewForm, rating: e.target.value})} className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 bg-white outline-none">
+                    <option value="5">⭐⭐⭐⭐⭐ (5/5) Sangat Bagus</option>
+                    <option value="4">⭐⭐⭐⭐ (4/5) Bagus</option>
+                    <option value="3">⭐⭐⭐ (3/5) Cukup</option>
+                    <option value="2">⭐⭐ (2/5) Kurang</option>
+                    <option value="1">⭐ (1/5) Sangat Kurang</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">Komentar</label>
+                  <textarea value={reviewForm.comment} onChange={e => setReviewForm({...reviewForm, comment: e.target.value})} rows={3} className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 bg-white outline-none resize-none" />
+                </div>
+                <button type="submit" disabled={submittingReview} className="w-full py-2.5 bg-indigo-700 text-white rounded-xl text-sm font-semibold hover:bg-indigo-800 disabled:opacity-60 transition-colors">
+                  {submittingReview ? 'Mengirim...' : 'Kirim Ulasan'}
+                </button>
+              </form>
+            </div>
           </div>
         </motion.div>
       </div>

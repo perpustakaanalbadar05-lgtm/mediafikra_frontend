@@ -67,7 +67,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-slate-800 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center gap-3 text-xs">
-          <p>© {new Date().getFullYear()} Media Fikra. Hak Cipta Dilindungi.</p>
+          <p>© {new Date().getFullYear()} Media Fikra. Hak Cipta Dilindungi. Di buat oleh cakrawa digital Wa :081359088246.</p>
           <Link to="/admin/login" className="text-slate-600 hover:text-slate-400 transition-colors">
             Admin
           </Link>

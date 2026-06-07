@@ -4,14 +4,16 @@ import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 
 const navItems = [
-  { to: '/admin', icon: LayoutDashboard, label: 'Dashboard', end: true },
-  { to: '/admin/buku', icon: Book, label: 'Buku' },
-  { to: '/admin/pesanan', icon: Package, label: 'Pesanan' },
-  { to: '/admin/testimoni', icon: Star, label: 'Testimoni' },
-  { to: '/admin/promo', icon: Megaphone, label: 'Promo & Berita' },
-  { to: '/admin/portofolio', icon: Image, label: 'Portofolio' },
-  { to: '/admin/pengguna', icon: Users, label: 'Pengguna' },
-  { to: '/admin/pengaturan', icon: Settings, label: 'Pengaturan' },
+  { to: '/admin', icon: LayoutDashboard, label: 'Dashboard', end: true, roles: ['superadmin', 'admin', 'cs', 'editor'] },
+  { to: '/admin/buku', icon: Book, label: 'Buku', roles: ['superadmin', 'editor'] },
+  { to: '/admin/kategori', icon: BookOpen, label: 'Kategori', roles: ['superadmin', 'editor'] },
+  { to: '/admin/pesanan', icon: Package, label: 'Pesanan', roles: ['superadmin', 'cs'] },
+  { to: '/admin/artikel', icon: Megaphone, label: 'Artikel Berita', roles: ['superadmin', 'admin', 'editor'] },
+  { to: '/admin/testimoni', icon: Star, label: 'Testimoni', roles: ['superadmin', 'admin'] },
+  { to: '/admin/promo', icon: Megaphone, label: 'Promo', roles: ['superadmin', 'admin'] },
+  { to: '/admin/portofolio', icon: Image, label: 'Portofolio', roles: ['superadmin', 'admin'] },
+  { to: '/admin/pengguna', icon: Users, label: 'Pengguna', roles: ['superadmin'] },
+  { to: '/admin/pengaturan', icon: Settings, label: 'Pengaturan', roles: ['superadmin'] },
 ];
 
 export default function AdminLayout() {
@@ -41,7 +43,7 @@ export default function AdminLayout() {
 
       {/* Nav */}
       <nav className="flex-1 p-4 space-y-1">
-        {navItems.map(item => (
+        {navItems.filter(item => item.roles.includes(user?.role)).map(item => (
           <NavLink
             key={item.to}
             to={item.to}
