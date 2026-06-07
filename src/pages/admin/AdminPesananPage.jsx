@@ -58,7 +58,16 @@ export default function AdminPesananPage() {
                 <td className="px-5 py-3 text-slate-500 hidden md:table-cell">{o.book?.judul} ({o.qty} eks)</td>
                 <td className="px-5 py-3 font-semibold text-indigo-700">Rp {o.total?.toLocaleString('id-ID')}</td>
                 <td className="px-5 py-3 hidden sm:table-cell">
-                  <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${statusColors[o.status]}`}>{o.status}</span>
+                  <select
+                    value={o.status}
+                    onChange={(e) => updateStatus(o.id, e.target.value)}
+                    className={`text-xs font-bold px-3 py-1 rounded-full outline-none cursor-pointer appearance-none text-center ${statusColors[o.status]} border-2 border-transparent hover:border-slate-200 transition-all`}
+                  >
+                    <option value="pending" className="bg-white text-slate-900">pending</option>
+                    <option value="diproses" className="bg-white text-slate-900">diproses</option>
+                    <option value="selesai" className="bg-white text-slate-900">selesai</option>
+                    <option value="dibatalkan" className="bg-white text-slate-900">dibatalkan</option>
+                  </select>
                 </td>
                 <td className="px-5 py-3 text-right">
                   <button onClick={() => setSelected(o)} className="p-1.5 text-slate-400 hover:text-indigo-700 rounded-lg hover:bg-indigo-50">
