@@ -18,7 +18,7 @@ const links = [
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-  const [wa, setWa] = useState('6281234567890');
+  const [wa, setWa] = useState('6282332975294');
 
   useEffect(() => {
     api.get('/settings').then(r => {

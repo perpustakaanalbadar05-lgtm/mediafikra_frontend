@@ -98,7 +98,7 @@ export default function FAQPage() {
           <p className="text-slate-700 font-medium mb-2">Masih punya pertanyaan lain?</p>
           <p className="text-slate-500 text-sm mb-4">Tim kami siap menjawab secara langsung via WhatsApp.</p>
           <a
-            href="https://wa.me/6281234567890?text=Halo Media Fikra, saya punya pertanyaan tentang layanan Anda."
+            href="https://wa.me/6282332975294?text=Halo Media Fikra, saya punya pertanyaan tentang layanan Anda."
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-700 text-white text-sm font-semibold rounded-xl hover:bg-indigo-800 transition-colors"

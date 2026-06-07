@@ -69,7 +69,7 @@ export default function HomePage() {
   const [settings, setSettings] = useState({
     hero_title: 'Wujudkan Karya Tulis Menjadi Buku Profesional',
     hero_subtitle: 'Media Fikra hadir sebagai mitra penerbitan terpercaya untuk dosen, peneliti, mahasiswa, dan penulis.',
-    contact_wa: '6281234567890',
+    contact_wa: '6282332975294',
   });
 
   useEffect(() => {

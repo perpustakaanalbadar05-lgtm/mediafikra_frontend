@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import api from '../services/api';
 
 export default function Footer() {
-  const [settings, setSettings] = useState({ contact_wa: '6281234567890', contact_email: 'info@mediafikra.com' });
+  const [settings, setSettings] = useState({ contact_wa: '6282332975294', contact_email: 'info@mediafikra.com' });
 
   useEffect(() => {
     api.get('/settings').then(r => {

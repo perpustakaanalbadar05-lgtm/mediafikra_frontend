@@ -6,7 +6,7 @@ export default function AdminSettingPage() {
   const [settings, setSettings] = useState({
     hero_title: 'Wujudkan Karya Tulis Menjadi Buku Profesional',
     hero_subtitle: 'Media Fikra hadir sebagai mitra penerbitan terpercaya.',
-    contact_wa: '6281234567890',
+    contact_wa: '6282332975294',
     contact_email: 'info@mediafikra.com',
   });
   const [saving, setSaving] = useState(false);
