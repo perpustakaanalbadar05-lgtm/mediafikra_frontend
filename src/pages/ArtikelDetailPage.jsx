@@ -48,16 +48,13 @@ export default function ArtikelDetailPage() {
         >
           {article.thumbnail && (
             <div className="w-full h-64 sm:h-96 relative overflow-hidden">
-              <img src={getImageUrl(article.thumbnail)} className="w-full h-full object-cover" alt={article.judul} />
+              <img src={getImageUrl(article.thumbnail)} className="w-full h-full object-cover" alt={article.title} />
             </div>
           )}
           
           <div className="p-8 sm:p-12">
-            <span className="inline-block bg-indigo-50 text-indigo-700 text-xs font-bold px-3 py-1 rounded-full mb-4">
-              {article.type}
-            </span>
             <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-6 leading-tight">
-              {article.judul}
+              {article.title}
             </h1>
             
             <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500 mb-10 pb-6 border-b border-slate-100">
@@ -72,7 +69,7 @@ export default function ArtikelDetailPage() {
             </div>
 
             <div className="prose prose-slate prose-indigo max-w-none prose-p:leading-relaxed prose-img:rounded-xl">
-              {article.isi.split('\n').map((paragraph, idx) => (
+              {article.content?.split('\n').map((paragraph, idx) => (
                 <p key={idx} className="mb-4 text-slate-700 text-lg">{paragraph}</p>
               ))}
             </div>
@@ -80,7 +77,7 @@ export default function ArtikelDetailPage() {
             <div className="mt-12 pt-6 border-t border-slate-100 flex items-center justify-between">
               <span className="text-sm font-medium text-slate-500">Bagikan artikel ini:</span>
               <div className="flex gap-2">
-                <button onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(article.judul + ' ' + window.location.href)}`, '_blank')} className="p-2 bg-green-50 text-green-600 rounded-full hover:bg-green-100 transition-colors">
+                <button onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(article.title + ' ' + window.location.href)}`, '_blank')} className="p-2 bg-green-50 text-green-600 rounded-full hover:bg-green-100 transition-colors">
                   <Share2 className="w-4 h-4" />
                 </button>
               </div>
