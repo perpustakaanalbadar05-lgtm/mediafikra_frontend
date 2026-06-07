@@ -19,7 +19,7 @@ export default function AdminKategoriPage() {
     e.preventDefault();
     setSaving(true); setError('');
     try {
-      await api.post('/admin/categories', { nama });
+      await api.post('/admin/categories', { name: nama });
       setShowModal(false);
       fetchItems();
     } catch (err) {
@@ -66,7 +66,7 @@ export default function AdminKategoriPage() {
                   <td className="px-5 py-3">
                     <div className="flex items-center gap-2">
                       <Tag className="w-4 h-4 text-indigo-500" />
-                      <span className="font-medium text-slate-900">{item.nama}</span>
+                      <span className="font-medium text-slate-900">{item.name}</span>
                     </div>
                   </td>
                   <td className="px-5 py-3 text-right">

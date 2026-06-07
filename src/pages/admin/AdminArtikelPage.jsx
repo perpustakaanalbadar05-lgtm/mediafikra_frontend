@@ -22,9 +22,9 @@ export default function AdminArtikelPage() {
     e.preventDefault();
     setSaving(true);
     const fd = new FormData();
-    fd.append('judul', form.judul);
-    fd.append('isi', form.isi);
-    fd.append('status_publish', form.status_publish ? '1' : '0');
+    fd.append('title', form.judul);
+    fd.append('content', form.isi);
+    fd.append('status', form.status_publish ? 'published' : 'draft');
     fd.append('type', form.type);
     if (thumbnail) fd.append('thumbnail', thumbnail);
     if (editId) fd.append('_method', 'PUT');
@@ -90,15 +90,15 @@ export default function AdminArtikelPage() {
                         <div className="w-12 h-12 rounded-lg bg-indigo-50 flex items-center justify-center"><Megaphone className="w-5 h-5 text-indigo-300" /></div>
                       )}
                       <div>
-                        <p className="font-semibold text-slate-900 line-clamp-1">{item.judul}</p>
-                        <p className="text-xs text-slate-500 mt-0.5 line-clamp-1">{item.isi}</p>
+                        <p className="font-semibold text-slate-900 line-clamp-1">{item.title}</p>
+                        <p className="text-xs text-slate-500 mt-0.5 line-clamp-1">{item.content}</p>
                       </div>
                     </div>
                   </td>
-                  <td className="px-5 py-3"><span className="px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded-full">{item.type}</span></td>
+                  <td className="px-5 py-3"><span className="px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded-full">{item.type || 'berita'}</span></td>
                   <td className="px-5 py-3">
-                    <span className={`text-xs px-2 py-1 rounded-full ${item.status_publish ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-600'}`}>
-                      {item.status_publish ? 'Published' : 'Draft'}
+                    <span className={`text-xs px-2 py-1 rounded-full ${item.status === 'published' ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-600'}`}>
+                      {item.status === 'published' ? 'Published' : 'Draft'}
                     </span>
                   </td>
                   <td className="px-5 py-3 text-right">
