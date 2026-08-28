@@ -80,7 +80,7 @@ export default function AdminLoginPage() {
             </button>
 
             <p className="text-center text-xs text-slate-400 mt-2">
-              Demo: admin@mediafikra.com / password
+               
             </p>
           </form>
         </div>
