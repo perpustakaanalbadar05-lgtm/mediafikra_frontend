@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Plus, Pencil, Trash2, X, BookOpen, ToggleLeft, ToggleRight } from 'lucide-react';
 import api from '../../services/api';
 
-const EMPTY = { judul: '', deskripsi: '', sinopsis: '', harga: '', stok: '', kategori: '', cover_image: null, featured: false, status_publish: true };
+const EMPTY = { judul: '', deskripsi: '', sinopsis: '', harga: '', stok: '', kategori: '', cover_image: null, featured: false, status_publish: true, penulis: '', isbn: '', tahun_terbit: '', halaman: '', penerbit: '' };
 
 export default function AdminBukuPage() {
   const [books, setBooks] = useState([]);
@@ -25,7 +25,7 @@ export default function AdminBukuPage() {
 
   const openCreate = () => { setForm(EMPTY); setEditId(null); setError(''); setShowModal(true); };
   const openEdit = (book) => {
-    setForm({ judul: book.judul, deskripsi: book.deskripsi || '', sinopsis: book.sinopsis || '', harga: book.harga, stok: book.stok, kategori: book.kategori || '', cover_image: null, featured: book.featured, status_publish: book.status_publish });
+    setForm({ judul: book.judul, deskripsi: book.deskripsi || '', sinopsis: book.sinopsis || '', harga: book.harga, stok: book.stok, kategori: book.kategori || '', cover_image: null, featured: book.featured, status_publish: book.status_publish, penulis: book.penulis || '', isbn: book.isbn || '', tahun_terbit: book.tahun_terbit || '', halaman: book.halaman || '', penerbit: book.penerbit || '' });
     setEditId(book.id);
     setError('');
     setShowModal(true);
@@ -43,6 +43,11 @@ export default function AdminBukuPage() {
       formData.append('harga', form.harga);
       formData.append('stok', form.stok);
       formData.append('kategori', form.kategori);
+      formData.append('penulis', form.penulis);
+      formData.append('isbn', form.isbn);
+      formData.append('tahun_terbit', form.tahun_terbit);
+      formData.append('halaman', form.halaman);
+      formData.append('penerbit', form.penerbit);
       formData.append('featured', form.featured ? 1 : 0);
       formData.append('status_publish', form.status_publish ? 1 : 0);
       if (form.cover_image) {
@@ -162,6 +167,26 @@ export default function AdminBukuPage() {
                     <option value="">-- Pilih Kategori --</option>
                     {categories.map(c => <option key={c.id} value={c.name}>{c.name}</option>)}
                   </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">Penulis</label>
+                  <input type="text" value={form.penulis} onChange={e => setForm({ ...form, penulis: e.target.value })} className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none" />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">ISBN</label>
+                  <input type="text" value={form.isbn} onChange={e => setForm({ ...form, isbn: e.target.value })} className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none" />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">Tahun Terbit</label>
+                  <input type="text" value={form.tahun_terbit} onChange={e => setForm({ ...form, tahun_terbit: e.target.value })} className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none" />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">Halaman</label>
+                  <input type="number" value={form.halaman} onChange={e => setForm({ ...form, halaman: e.target.value })} className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none" />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">Penerbit</label>
+                  <input type="text" value={form.penerbit} onChange={e => setForm({ ...form, penerbit: e.target.value })} className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none" />
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-slate-700 mb-1">Harga (Rp) *</label>

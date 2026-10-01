@@ -121,7 +121,7 @@ export default function DetailBukuPage() {
                   whileHover={{ scale: 1.05 }}
                   src={getImageUrl(book.cover_image)} 
                   alt={book.judul} 
-                  className="w-full max-w-sm rounded-xl shadow-2xl object-cover" 
+                  className="w-auto h-auto max-w-[85%] lg:max-w-[75%] max-h-[500px] lg:max-h-[650px] rounded-xl shadow-2xl object-contain" 
                 />
               ) : (
                 <BookOpen className="w-24 h-24 text-indigo-300" />
@@ -139,6 +139,33 @@ export default function DetailBukuPage() {
                 {book.kategori}
               </span>
               <h1 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4">{book.judul}</h1>
+              
+              <div className="bg-slate-50/50 border border-slate-200 rounded-xl p-5 mb-8 grid grid-cols-2 gap-y-4 gap-x-8">
+                <div>
+                  <p className="text-xs text-slate-500 mb-0.5">Penulis</p>
+                  <p className="text-sm font-bold text-slate-800">{book.penulis || '-'}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-slate-500 mb-0.5">Kategori</p>
+                  <p className="text-sm font-bold text-slate-800">{book.kategori || '-'}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-slate-500 mb-0.5">ISBN</p>
+                  <p className="text-sm font-bold text-slate-800">{book.isbn || '-'}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-slate-500 mb-0.5">Halaman</p>
+                  <p className="text-sm font-bold text-slate-800">{book.halaman || '-'}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-slate-500 mb-0.5">Tahun Terbit</p>
+                  <p className="text-sm font-bold text-slate-800">{book.tahun_terbit || '-'}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-slate-500 mb-0.5">Penerbit</p>
+                  <p className="text-sm font-bold text-slate-800">{book.penerbit || '-'}</p>
+                </div>
+              </div>
               {book.deskripsi && (
                 <p className="text-slate-500 text-base leading-relaxed mb-6">{book.deskripsi}</p>
               )}
